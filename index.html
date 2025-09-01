@@ -47,7 +47,7 @@
               <i class="bi bi-cloud-upload display-1 text-primary mb-3"></i>
               <h5 class="text-dark mb-2">Click or Drop PDF Files Here</h5>
               <p class="text-muted text-center">
-                Select 2 or more PDF files (first pages will be merged)
+                Select PDF files to merge (first pages will be combined)
               </p>
             </div>
 
@@ -61,6 +61,12 @@
 
             <!-- File List -->
             <div id="fileList" class="mb-4"></div>
+            
+            <!-- Reorder Instructions -->
+            <div id="reorderInstructions" class="alert alert-info d-none mb-4" role="alert">
+              <i class="bi bi-arrows-move me-2"></i>
+              <strong>Tip:</strong> Drag and drop files to reorder them. The order will affect how PDFs appear in the final merged document.
+            </div>
 
             <!-- Controls -->
             <div class="mb-4">
@@ -102,6 +108,123 @@
                 </div>
               </div>
 
+              <!-- Paper Size Options -->
+              <div class="card p-3 mb-3">
+                <h6 class="card-title mb-3">
+                  <i class="bi bi-file-earmark-text me-2"></i>Choose Paper Size:
+                </h6>
+                <select id="paperSize" class="form-select">
+                  <option value="a4" selected>A4 (210 × 297 mm)</option>
+                  <option value="letter">Letter (8.5 × 11 in)</option>
+                  <option value="legal">Legal (8.5 × 14 in)</option>
+                  <option value="a3">A3 (297 × 420 mm)</option>
+                </select>
+              </div>
+
+              <!-- PDFs Per Page Options -->
+              <div class="card p-3 mb-3">
+                <h6 class="card-title mb-3">
+                  <i class="bi bi-grid-3x3-gap me-2"></i>PDFs Per Page:
+                </h6>
+                <div class="row g-2 mb-3">
+                  <div class="col-3">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="pdfsPerPage"
+                        value="1"
+                        id="onePdf"
+                      />
+                      <label class="form-check-label text-center d-block" for="onePdf">
+                        <i class="bi bi-square d-block fs-4 mb-1"></i>
+                        <small>1</small>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="pdfsPerPage"
+                        value="2"
+                        id="twoPdfs"
+                        checked
+                      />
+                      <label class="form-check-label text-center d-block" for="twoPdfs">
+                        <i class="bi bi-grid-1x2 d-block fs-4 mb-1"></i>
+                        <small>2</small>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="pdfsPerPage"
+                        value="4"
+                        id="fourPdfs"
+                      />
+                      <label class="form-check-label text-center d-block" for="fourPdfs">
+                        <i class="bi bi-grid d-block fs-4 mb-1"></i>
+                        <small>4</small>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="pdfsPerPage"
+                        value="6"
+                        id="sixPdfs"
+                      />
+                      <label class="form-check-label text-center d-block" for="sixPdfs">
+                        <i class="bi bi-grid-3x2 d-block fs-4 mb-1"></i>
+                        <small>6</small>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Custom Input -->
+                <div class="row g-2 align-items-center mb-2">
+                  <div class="col-4">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="pdfsPerPage"
+                        value="custom"
+                        id="customPdfs"
+                      />
+                      <label class="form-check-label" for="customPdfs">
+                        <small>Custom:</small>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <input
+                      type="number"
+                      id="customPdfsInput"
+                      class="form-control form-control-sm"
+                      min="1"
+                      max="20"
+                      value="8"
+                      placeholder="Enter number"
+                    />
+                  </div>
+                </div>
+                
+                <small class="text-muted d-block">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Choose how many PDFs to fit on each page (max 20). Additional pages will be created automatically for remaining files.
+                </small>
+              </div>
+
               <!-- Merge Button -->
               <button
                 class="btn btn-primary btn-lg w-100"
@@ -137,10 +260,19 @@
           <!-- Right Panel - Preview -->
           <div class="col-lg-6">
             <div class="preview-area p-4">
-              <div class="text-center mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="mb-0">
-                  <i class="bi bi-eye me-2"></i>Real-time Preview
+                  <i class="bi bi-eye me-2"></i>All Pages Preview
                 </h5>
+                <div class="btn-group btn-group-sm" role="group">
+                  <button type="button" class="btn btn-outline-secondary" id="prevPage" disabled>
+                    <i class="bi bi-chevron-left"></i>
+                  </button>
+                  <span class="btn btn-outline-secondary" id="pageInfo">Page 1 of 1</span>
+                  <button type="button" class="btn btn-outline-secondary" id="nextPage" disabled>
+                    <i class="bi bi-chevron-right"></i>
+                  </button>
+                </div>
               </div>
               <div
                 class="d-flex justify-content-center align-items-center"
@@ -191,7 +323,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom JavaScript -->
-    <script src="script.js"></script>
+    <!-- Custom JavaScript Modules -->
+    <script type="module" src="js/app.js"></script>
   </body>
 </html>

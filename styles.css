@@ -71,12 +71,123 @@ body {
     border-radius: 10px;
     border-left: 4px solid #667eea;
     backdrop-filter: blur(5px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: move;
+    position: relative;
+}
+
+.file-item:not(.dragging):hover {
+    transform: translateX(5px) scale(1.02);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+}
+
+/* Drag and Drop Styles */
+.file-item.dragging {
+    opacity: 0.5;
+    transform: rotate(5deg) scale(1.05);
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.file-item.drag-over {
+    border-left: 4px solid #764ba2;
+    background: linear-gradient(135deg, rgba(118, 75, 162, 0.2), rgba(102, 126, 234, 0.2));
+    transform: translateX(10px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(118, 75, 162, 0.3);
+    animation: dragPulse 0.6s ease-in-out infinite;
+}
+
+.drag-handle {
+    cursor: grab;
+    padding: 5px;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    opacity: 0.6;
+}
+
+.drag-handle:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea !important;
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.file-item:hover .drag-handle {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.file-order-number .badge {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    font-size: 0.75rem;
+    padding: 0.4em 0.6em;
+    border-radius: 50%;
+    min-width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.3s ease;
 }
 
-.file-item:hover {
-    transform: translateX(5px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+.file-item:hover .file-order-number .badge {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Drag feedback animations */
+@keyframes dragPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Visual feedback for reordering */
+.file-item::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.file-item.drag-over::before {
+    opacity: 1;
+}
+
+/* Alert Styles */
+.alert-info {
+    background: linear-gradient(135deg, rgba(13, 202, 240, 0.1), rgba(13, 110, 253, 0.1)) !important;
+    border: 1px solid rgba(13, 202, 240, 0.3) !important;
+    color: #0c63e4 !important;
+}
+
+.alert-info .bi {
+    color: #0c63e4;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    border: none;
+    color: white;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    border: none;
+    color: white;
 }
 
 /* Button Styles */
@@ -147,19 +258,6 @@ body {
     font-weight: 500;
 }
 
-/* Alert Styles */
-.alert-danger {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    border: none;
-    color: white;
-}
-
-.alert-success {
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    border: none;
-    color: white;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
     .main-container {
@@ -178,5 +276,19 @@ body {
     
     .display-1 {
         font-size: 3rem;
+    }
+    
+    .drag-handle {
+        padding: 8px;
+    }
+    
+    .file-order-number .badge {
+        min-width: 20px;
+        height: 20px;
+        font-size: 0.7rem;
+    }
+    
+    .file-item.dragging {
+        transform: rotate(3deg) scale(1.03);
     }
 }
