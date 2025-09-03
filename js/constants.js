@@ -15,6 +15,13 @@ export const PAPER_SIZES = {
   a3: { width: 841.89, height: 1190.55 }
 };
 
+// Rendering / export tuning
+// TARGET_DPI: pixels per inch to use when creating canvas for export (72 points = 1 inch)
+// Increase toward 300 for high-quality/print; higher values increase memory usage.
+export const TARGET_DPI = 150;
+// MAX_RENDER_SCALE: safety cap for pdf.js page render scale to avoid runaway memory usage
+export const MAX_RENDER_SCALE = 4;
+
 // Global variables
 export let selectedFiles = [];
 export let currentPreviewCanvas = null;
